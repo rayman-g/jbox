@@ -1,14 +1,14 @@
 pipeline {
   agent { 
       docker { image 'hashicorp/terraform:0.11.10' 
-               args '--entrypoint="" -v $WORKSPACE:/workspace -w /workspace'
+               args '--entrypoint="" -v $WORKSPACE/test:/workspace -w /workspace'
              }
   }
   stages {
     stage('TF Plan') {
        steps {
-
-           sh 'terraform plan -out buildplan'
+           sh 'terraform init -input=false'
+           sh 'terraform plan -out buildplan -input=false'
          }
        }
     stage('Approval') {
