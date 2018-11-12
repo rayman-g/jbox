@@ -1,5 +1,9 @@
 pipeline {
-  agent { label 'master' }
+  agent { 
+     docker { image 'hashicorp/terraform:0.11.10' 
+     args '--entrypoint="" -v $WORKSPACE/test:/workspace -w /workspace/test'
+        }
+      }
   stages {
      stage('Clone') {
        steps {
@@ -7,11 +11,6 @@ pipeline {
          }
        }
     stage('TF Plan') {
-       agent { 
-           docker { image 'hashicorp/terraform:0.11.10' 
-                    args '--entrypoint="" -v $WORKSPACE/test:/workspace -w /workspace'
-           }
-       }
        steps {
            sh 'terraform init -input=false'
            sh 'terraform plan -out buildplan -input=false'
