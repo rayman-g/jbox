@@ -5,6 +5,11 @@ pipeline {
              }
   }
   stages {
+     stage('Clone') {
+       steps {
+           git credentialsId: 'github', url: 'git@github.com:rayman-g/jbox.git'
+         }
+       }
     stage('TF Plan') {
        steps {
            sh 'terraform init -input=false'
