@@ -15,8 +15,8 @@ pipeline {
 //      }
     stage('TF Plan') {
        steps {
-           sh 'terraform init -input=false test'
-           sh 'terraform plan -out buildplan -input=false test'
+           sh 'terraform init -input=false ${env.ENVIRONMENT}/${env.REGION}/${env.JOB_BASE_NAME}'
+           sh 'terraform plan -out buildplan -input=false ${env.ENVIRONMENT}/${env.REGION}/${env.JOB_BASE_NAME}'
          }
        }
     stage('Approval') {
