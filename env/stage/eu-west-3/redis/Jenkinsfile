@@ -1,14 +1,19 @@
 pipeline {
   agent { 
-      docker { image 'hashicorp/terraform:0.11.10' 
-               args '--entrypoint="" -v $WORKSPACE/test:/workspace -w /workspace'
-             }
-  }
+     docker { image 'hashicorp/terraform:0.11.10' 
+     args '--entrypoint="" -v $WORKSPACE:/workspace -w /workspace'
+        }
+      }
   stages {
+//     stage('Clone') {
+//       steps {
+//           git credentialsId: 'github', url: 'git@github.com:rayman-g/jbox.git'
+//         }
+//      }
     stage('TF Plan') {
        steps {
-           sh 'terraform init -input=false'
-           sh 'terraform plan -out buildplan -input=false'
+           sh 'terraform init -input=false test'
+           sh 'terraform plan -out buildplan -input=false test'
          }
        }
     stage('Approval') {
@@ -20,7 +25,7 @@ pipeline {
     }
  stage('TF Apply') {
       steps {
-          sh 'terraform apply -input=false buildplan'
+          sh 'terraform apply -auto-approve -input=false buildplan test'
       }
     }
   }

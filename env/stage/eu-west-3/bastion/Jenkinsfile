@@ -12,9 +12,8 @@ pipeline {
 //      }
     stage('TF Plan') {
        steps {
-           sh 'cd test ; ls -la'
-           sh 'cd test ; terraform init -input=false'
-           sh 'cd test ; terraform plan -out buildplan -input=false'
+           sh 'terraform init -input=false test'
+           sh 'terraform plan -out buildplan -input=false test'
          }
        }
     stage('Approval') {
@@ -26,7 +25,7 @@ pipeline {
     }
  stage('TF Apply') {
       steps {
-          sh 'cd test ; terraform apply -input=false buildplan'
+          sh 'terraform apply -auto-approve -input=false buildplan test'
       }
     }
   }
