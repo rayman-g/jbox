@@ -1,0 +1,40 @@
+- job-template:
+    name: '{folder_name}'
+    project-type: folder
+
+- job-template:
+    name: '{folder_name}/{job_name}'
+    parameters:
+      - string:
+          name: ENVIRONMENT
+          default: '{name}'
+      - string:
+          name: REGION
+          default: '{region}'
+    project-type: pipeline
+    sandbox: true
+    pipeline-scm:
+      scm:
+        - git:
+            url: git@github.com:rayman-g/jbox.git
+            credentials-id: 'github'
+            branches:
+              - 'origin/master'
+            clean:
+              before: true
+      script-path: 'ops/jobs/{job_name}/Jenkinsfile'
+      lightweight-checkout: true
+
+- project:
+    name: 'prod-main'
+    region: 'eu-west-1'
+    folder_name:
+      - '{name}-{region}'
+    job_name:
+      - 'bastion'
+      - 'elk'
+      - 'jenkins'
+      - 'redis'
+    jobs:
+      - '{folder_name}'
+      - '{folder_name}/{job_name}'
