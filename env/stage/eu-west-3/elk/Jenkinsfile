@@ -4,6 +4,9 @@ pipeline {
      args '--entrypoint="" -v $WORKSPACE:/workspace -w /workspace'
         }
       }
+  options { disableConcurrentBuilds() 
+            timestamps() 
+  }
   stages {
 //     stage('Clone') {
 //       steps {
@@ -12,8 +15,8 @@ pipeline {
 //      }
     stage('TF Plan') {
        steps {
-           sh 'terraform init -input=false test'
-           sh 'terraform plan -out buildplan -input=false test'
+           sh 'terraform init -input=false ${ENVIRONMENT}/${REGION}/${JOB_BASE_NAME}'
+           sh 'terraform plan -out buildplan -input=false ${ENVIRONMENT}/${REGION}/${JOB_BASE_NAME}'
          }
        }
     stage('Approval') {
