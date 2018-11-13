@@ -4,6 +4,9 @@ pipeline {
      args '--entrypoint="" -v $WORKSPACE:/workspace -w /workspace'
         }
       }
+  options { disableConcurrentBuilds() 
+            timestamps() 
+  }
   stages {
 //     stage('Clone') {
 //       steps {
